@@ -1,0 +1,10 @@
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter\bin\Debug\AnylandImporte.dll
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter\bin\Debug\AnylandImporte.pdb
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter\bin\Debug\0Harmony.dll
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter\bin\Debug\NeosModLoader.dll
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter\bin\Debug\NeosModLoader.xml
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter\obj\Debug\AnylandImporter.csproj.AssemblyReference.cache
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter\obj\Debug\AnylandImporter.csproj.CoreCompileInputs.cache
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter\obj\Debug\AnylandImporter.csproj.CopyComplete
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter\obj\Debug\AnylandImporte.dll
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter\obj\Debug\AnylandImporte.pdb

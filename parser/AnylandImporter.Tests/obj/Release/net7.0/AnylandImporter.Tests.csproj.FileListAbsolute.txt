@@ -1,0 +1,18 @@
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\bin\Release\net7.0\zetaphor's lab_test.json
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\bin\Release\net7.0\AnylandImporter.Tests.exe
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\bin\Release\net7.0\AnylandImporter.Tests.deps.json
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\bin\Release\net7.0\AnylandImporter.Tests.runtimeconfig.json
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\bin\Release\net7.0\AnylandImporter.Tests.dll
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\bin\Release\net7.0\AnylandImporter.Tests.pdb
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\bin\Release\net7.0\Newtonsoft.Json.dll
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\obj\Release\net7.0\AnylandImporter.Tests.csproj.AssemblyReference.cache
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\obj\Release\net7.0\AnylandImporter.Tests.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\obj\Release\net7.0\AnylandImporter.Tests.AssemblyInfoInputs.cache
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\obj\Release\net7.0\AnylandImporter.Tests.AssemblyInfo.cs
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\obj\Release\net7.0\AnylandImporter.Tests.csproj.CoreCompileInputs.cache
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\obj\Release\net7.0\AnylandImporter.Tests.csproj.CopyComplete
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\obj\Release\net7.0\AnylandImporter.Tests.dll
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\obj\Release\net7.0\refint\AnylandImporter.Tests.dll
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\obj\Release\net7.0\AnylandImporter.Tests.pdb
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\obj\Release\net7.0\AnylandImporter.Tests.genruntimeconfig.cache
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\obj\Release\net7.0\ref\AnylandImporter.Tests.dll
