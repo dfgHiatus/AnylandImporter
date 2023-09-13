@@ -1,8 +1,10 @@
 ﻿using AnylandImporter.Assets;
+using BaseX;
 using FrooxEngine;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime;
 
 namespace AnylandImporter;
 
@@ -13,8 +15,15 @@ internal class MeshConverter
     {
         if (thingPartBase == ThingPartBase.None) return;
 
-        ModelImportSettings ms = new ModelImportSettings();
-        ModelImporter.ImportModel(Path.Combine(Importer.CachePath, AnylandModelDictionary.Models[thingPartBase]), partSlot, ms);
+        var path = Path.Combine(Importer.CachePath, AnylandModelDictionary.Models[thingPartBase]);
+        if (!File.Exists(path)) return; // Not all anyland meshes are available (yet!)
+
+        var partChild = partSlot.AddSlot("Part Child"); // Cannot pass a ref into an async delegate
+        Engine.Current.WorldManager.FocusedWorld.RootSlot.StartGlobalTask(async delegate
+        {
+            await ModelImporter.ImportModelAsync(path, partChild, new ModelImportSettings()); // FIXME
+        });
+
         partSlot.AttachComponent<MeshCollider>();
 
         if (t1 != TextureType.None && t2 != TextureType.None)
@@ -32,7 +41,7 @@ internal class MeshConverter
         DetermineMaterial(ref partSlot, materialType, t2d, partSlot.GetComponent<ProceduralTexture>());
     }
 
-    private static void DetermineMaterial(ref Slot partSlot, MaterialType t, StaticTexture2D t2d, ProceduralTexture pt) // TODO Implement more materials, assign pt
+    private static void DetermineMaterial(ref Slot partSlot, MaterialType t, StaticTexture2D t2d, ProceduralTexture pt) // TODO: Implement more materials, assign pt
     {
         var mr = partSlot.GetComponent<MeshRenderer>(); // There should always be a MeshRenderer attached to this slot
         if (mr == null) mr = partSlot.AttachComponent<MeshRenderer>();
@@ -80,7 +89,7 @@ internal class MeshConverter
     private static void TextureSetHelper(AssetRef<ITexture2D> provider, ref StaticTexture2D t2d, ref ProceduralTexture pt)
     {
         if (pt != null) provider.Target = pt;
-        if (t2d != null) provider.Target = t2d;
+        if (t2d != null) provider.Target = t2d; // Prioritize StaticTexture2Ds over ProceduralTextures
     }
 
     private static void DetermineTexture(ref Slot partSlot, List<TextureType> t)

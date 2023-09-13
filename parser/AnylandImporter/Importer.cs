@@ -6,7 +6,6 @@ using FrooxEngine;
 using HarmonyLib;
 using NeosModLoader;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -22,7 +21,7 @@ public class Importer : NeosMod
 
     public static ModConfiguration config;
     public const string AnylandWorldExtension = ".anyland";
-    internal static readonly string CachePath = Path.Combine("nml_mods", "AnylandImporter", "baseShapes");
+    internal static readonly string CachePath = Path.Combine(Engine.Current.AppPath, "nml_mods", "AnylandImporter", "baseShapes");
 
     public override void OnEngineInit()
     {
