@@ -5,40 +5,51 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime;
+using System.Threading.Tasks;
 
 namespace AnylandImporter;
 
 internal class MeshConverter
 {
-    internal static void Convert(ref Slot partSlot, ThingPartBase thingPartBase, MaterialType materialType, 
+    internal static async Task<Slot> Convert(Slot partSlot, ThingPartBase thingPartBase, MaterialType materialType, 
         string url, TextureType t1, TextureType t2)
     {
-        if (thingPartBase == ThingPartBase.None) return;
+        if (thingPartBase == ThingPartBase.None) return partSlot;
 
         var path = Path.Combine(Importer.CachePath, AnylandModelDictionary.Models[thingPartBase]);
-        if (!File.Exists(path)) return; // Not all anyland meshes are available (yet!)
+        if (!File.Exists(path)) return partSlot; // Not all anyland meshes are available (yet!)
 
+        await default(ToWorld);
         var partChild = partSlot.AddSlot("Part Child"); // Cannot pass a ref into an async delegate
-        Engine.Current.WorldManager.FocusedWorld.RootSlot.StartGlobalTask(async delegate
+        await Engine.Current.WorldManager.FocusedWorld.RootSlot.StartGlobalTask(async delegate
         {
             await ModelImporter.ImportModelAsync(path, partChild, new ModelImportSettings()); // FIXME
         });
 
         partSlot.AttachComponent<MeshCollider>();
+        await default(ToBackground);
 
         if (t1 != TextureType.None && t2 != TextureType.None)
         {
+            await default(ToWorld);
             DetermineTexture(ref partSlot, new List<TextureType>() { t1, t2 });
+            await default(ToBackground);
         }
 
+        await default(ToWorld);
         StaticTexture2D t2d = null;
         if (!string.IsNullOrEmpty(url) && Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out var uriResult))
         {
             t2d = partSlot.AttachComponent<StaticTexture2D>();
             t2d.URL.Value = uriResult;
         }
+        await default(ToBackground);
 
+        await default(ToWorld);
         DetermineMaterial(ref partSlot, materialType, t2d, partSlot.GetComponent<ProceduralTexture>());
+        await default(ToBackground);
+
+        return partSlot;
     }
 
     private static void DetermineMaterial(ref Slot partSlot, MaterialType t, StaticTexture2D t2d, ProceduralTexture pt) // TODO: Implement more materials, assign pt

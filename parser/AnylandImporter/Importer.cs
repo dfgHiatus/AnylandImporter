@@ -3,11 +3,13 @@ using AnylandImporter.Tests;
 using BaseX;
 using CodeX;
 using FrooxEngine;
+using FrooxEngine.UIX;
 using HarmonyLib;
 using NeosModLoader;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace AnylandImporter;
 
@@ -52,8 +54,11 @@ public class Importer : NeosMod
 
             foreach (var file in hasAnylandWorld)
             {
-                var area = JsonConvert.DeserializeObject<Area>(File.ReadAllText(file));
-                ImportAnylandWorld(slot, area);
+                slot.StartGlobalTask(async delegate
+                {
+                    var area = JsonConvert.DeserializeObject<Area>(File.ReadAllText(file));
+                    await ImportAnylandWorld(slot, area);
+                });
             }
             if (notAnylandWorld.Count <= 0) return false;
             files = notAnylandWorld.ToArray();
@@ -61,7 +66,7 @@ public class Importer : NeosMod
         }
 
         /// <summary>
-        /// 
+        /// Does the import-ant stuff ;)
         /// </summary>
         /// <param name="slot"></param>
         /// <param name="area"></param>
@@ -73,7 +78,7 @@ public class Importer : NeosMod
         /// - changed vertices
         /// - body
         /// </remarks>
-        private static void ImportAnylandWorld(Slot slot, Area area)
+        private static async Task ImportAnylandWorld(Slot slot, Area area)
         {
             if (area == null) return;
             if (area.thingDefinitions == null) return;
@@ -84,11 +89,11 @@ public class Importer : NeosMod
                 if (thing.thingDescriptor == null) continue;
 
                 var child = slot.AddSlot(thing.thingDescriptor.n ?? "Thing");
-                AttributeConverter.Convert(ref child, thing.thingDescriptor.a);
-                CommentConverter.Convert(ref child, thing.thingDescriptor.d);
-                TagConverter.Convert(ref child, thing.thingDescriptor.v.ToString());
-                PartConverter.Convert(ref child, thing.thingDescriptor.p);
-                StateConverter.Convert(ref child, thing.thingDescriptor.s);
+                child = await AttributeConverter.Convert(child, thing.thingDescriptor.a);
+                child = await CommentConverter.Convert(child, thing.thingDescriptor.d);
+                child = await TagConverter.Convert(child, thing.thingDescriptor.v.ToString());
+                child = await PartConverter.Convert(child, thing.thingDescriptor.p);
+                child = await StateConverter.Convert(child, thing.thingDescriptor.s);
             }
         }
     }
