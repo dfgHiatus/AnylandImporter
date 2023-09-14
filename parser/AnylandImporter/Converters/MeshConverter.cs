@@ -1,10 +1,8 @@
 ﻿using AnylandImporter.Assets;
-using BaseX;
 using FrooxEngine;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime;
 using System.Threading.Tasks;
 
 namespace AnylandImporter;
@@ -16,23 +14,21 @@ internal class MeshConverter
     {
         if (thingPartBase == ThingPartBase.None) return partSlot;
 
-        var path = Path.Combine(Importer.CachePath, AnylandModelDictionary.Models[thingPartBase]);
+        var anylandModelName = AnylandModelDictionary.Models[thingPartBase];
+        var path = Path.Combine(Importer.CachePath, anylandModelName);
         if (!File.Exists(path)) return partSlot; // Not all anyland meshes are available (yet!)
 
         await default(ToWorld);
-        var partChild = partSlot.AddSlot("Part Child"); // Cannot pass a ref into an async delegate
-        await Engine.Current.WorldManager.FocusedWorld.RootSlot.StartGlobalTask(async delegate
-        {
-            await ModelImporter.ImportModelAsync(path, partChild, new ModelImportSettings()); // FIXME
-        });
-
-        partSlot.AttachComponent<MeshCollider>();
+        await UniversalImporter.Import(path, Engine.Current.WorldManager.FocusedWorld, partSlot.GlobalPosition, partSlot.GlobalRotation, true);
+        var importSlot = Engine.Current.WorldManager.FocusedWorld.RootSlot.Find(anylandModelName);
+        importSlot.SetParent(partSlot); // Will preserve global transform
+        importSlot.AttachComponent<MeshCollider>();
         await default(ToBackground);
 
         if (t1 != TextureType.None && t2 != TextureType.None)
         {
             await default(ToWorld);
-            DetermineTexture(ref partSlot, new List<TextureType>() { t1, t2 });
+            DetermineTexture(ref importSlot, new List<TextureType>() { t1, t2 });
             await default(ToBackground);
         }
 
@@ -40,13 +36,13 @@ internal class MeshConverter
         StaticTexture2D t2d = null;
         if (!string.IsNullOrEmpty(url) && Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out var uriResult))
         {
-            t2d = partSlot.AttachComponent<StaticTexture2D>();
+            t2d = importSlot.AttachComponent<StaticTexture2D>();
             t2d.URL.Value = uriResult;
         }
         await default(ToBackground);
 
         await default(ToWorld);
-        DetermineMaterial(ref partSlot, materialType, t2d, partSlot.GetComponent<ProceduralTexture>());
+        DetermineMaterial(ref importSlot, materialType, t2d, importSlot.GetComponent<ProceduralTexture>());
         await default(ToBackground);
 
         return partSlot;
@@ -85,7 +81,10 @@ internal class MeshConverter
     {
         var mat = partSlot.AttachComponent<PBS_Metallic>();
         TextureSetHelper(mat.AlbedoTexture, ref t2d, ref pt);
-        mr.Materials.Add(mat);
+        if (mr.Materials.Count == 0)
+            mr.Materials[0] = mat;
+        else
+            mr.Materials.Add(mat);
         return mat;
     }
 
@@ -93,7 +92,10 @@ internal class MeshConverter
     {
         var mat = partSlot.AttachComponent<UnlitMaterial>();
         TextureSetHelper(mat.Texture, ref t2d, ref pt);
-        mr.Materials.Add(mat);
+        if (mr.Materials.Count == 0)
+            mr.Materials[0] = mat;
+        else
+            mr.Materials.Add(mat);
         return mat;
     }
 

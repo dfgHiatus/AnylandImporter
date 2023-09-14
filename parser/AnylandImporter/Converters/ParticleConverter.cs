@@ -14,9 +14,11 @@ namespace AnylandImporter.Converters
             if (p == ParticleSystemType.None) return partSlot;
 
             await default(ToWorld);
+            var mat = partSlot.AttachComponent<UnlitMaterial>();
             var system = partSlot.AttachComponent<ParticleSystem>();
             var style = partSlot.AttachComponent<ParticleStyle>();
             var emitter = partSlot.AttachComponent<SphereEmitter>();
+            style.Material.Target = mat;
             system.Style.Target = style;
             emitter.System.Target = system;
             await default(ToBackground);
