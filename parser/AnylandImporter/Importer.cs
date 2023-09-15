@@ -3,10 +3,10 @@ using AnylandImporter.Tests;
 using BaseX;
 using CodeX;
 using FrooxEngine;
-using FrooxEngine.UIX;
 using HarmonyLib;
 using NeosModLoader;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -23,13 +23,12 @@ public class Importer : NeosMod
 
     public static ModConfiguration config;
     public const string AnylandWorldExtension = ".anyland";
-    internal static readonly string CachePath = Path.Combine(Engine.Current.AppPath, "nml_mods", "AnylandImporter", "baseShapes");
+    internal static readonly string CachePath = Path.Combine(Engine.Current.AppPath, "nml_mods", "AnylandImporter");
 
     public override void OnEngineInit()
     {
         new Harmony("net.dfgHiatus.AnylandImporter").PatchAll();
         config = GetConfiguration();
-        Directory.CreateDirectory(CachePath);
     }
 
 
@@ -56,10 +55,27 @@ public class Importer : NeosMod
             {
                 slot.StartGlobalTask(async delegate
                 {
-                    var area = JsonConvert.DeserializeObject<Area>(File.ReadAllText(file));
+                    Area area;
+                    try
+                    {
+                        area = JsonConvert.DeserializeObject<Area>(File.ReadAllText(file));
+                    }
+                    catch (Exception e)
+                    {
+                        Error($"Failed to deserialize Area {file}: {e.Message}");
+                        return;
+                    }
+
+                    if (area == null)
+                    {
+                        Error($"Deserialized Area, but file was invalid: {file}");
+                        return;
+                    }
+
                     await ImportAnylandWorld(slot, area);
                 });
             }
+
             if (notAnylandWorld.Count <= 0) return false;
             files = notAnylandWorld.ToArray();
             return true;
@@ -83,18 +99,36 @@ public class Importer : NeosMod
             if (area == null) return;
             if (area.thingDefinitions == null) return;
 
+            await default(ToWorld);
+            var objectRoot = slot.AttachComponent<ObjectRoot>();
+            await default(ToBackground);
+
             foreach (var thing in area.thingDefinitions)
             {
                 if (thing == null) continue;
                 if (thing.thingDescriptor == null) continue;
 
+                await default(ToWorld);
                 var child = slot.AddSlot(thing.thingDescriptor.n ?? "Thing");
+                await default(ToBackground);
+
+                child = await StateConverter.Convert(child, thing.thingDescriptor.s); // Place this first so transforms have priority
                 child = await AttributeConverter.Convert(child, thing.thingDescriptor.a);
                 child = await CommentConverter.Convert(child, thing.thingDescriptor.d);
                 child = await TagConverter.Convert(child, thing.thingDescriptor.v.ToString());
                 child = await PartConverter.Convert(child, thing.thingDescriptor.p);
-                child = await StateConverter.Convert(child, thing.thingDescriptor.s);
             }
+
+            // TODO: Test world optimizations
+            await default(ToWorld);
+            objectRoot.RemoveChildrenObjectRoots();
+            MaterialOptimizer.DeduplicateMaterials(slot);
+            WorldOptimizer.DeduplicateStaticProviders(slot);
+            WorldOptimizer.CleanupUnreferencedAssets(slot);
+            WorldOptimizer.CleanupEmptySlots(slot);
+            WorldOptimizer.CleanupSlotsWithNonpersistentComponents(slot);
+            await default(ToBackground);
+
         }
     }
 }

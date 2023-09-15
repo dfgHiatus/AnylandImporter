@@ -15,8 +15,10 @@ internal class MeshConverter
         if (thingPartBase == ThingPartBase.None) return partSlot;
 
         var anylandModelName = AnylandModelDictionary.Models[thingPartBase];
-        var path = Path.Combine(Importer.CachePath, anylandModelName);
+        var path = Path.Combine(AnylandModelDictionary.Path, anylandModelName);
         if (!File.Exists(path)) return partSlot; // Not all anyland meshes are available (yet!)
+
+        // TODO: Get the slot UniversalImporter creates
 
         await default(ToWorld);
         await UniversalImporter.Import(path, Engine.Current.WorldManager.FocusedWorld, partSlot.GlobalPosition, partSlot.GlobalRotation, true);
@@ -28,7 +30,7 @@ internal class MeshConverter
         if (t1 != TextureType.None && t2 != TextureType.None)
         {
             await default(ToWorld);
-            DetermineTexture(ref importSlot, new List<TextureType>() { t1, t2 });
+            partSlot = await DetermineTexture(importSlot, new List<TextureType>() { t1, t2 });
             await default(ToBackground);
         }
 
@@ -42,13 +44,13 @@ internal class MeshConverter
         await default(ToBackground);
 
         await default(ToWorld);
-        DetermineMaterial(ref importSlot, materialType, t2d, importSlot.GetComponent<ProceduralTexture>());
+        partSlot = await DetermineMaterial(importSlot, materialType, t2d, importSlot.GetComponent<ProceduralTexture>());
         await default(ToBackground);
 
         return partSlot;
     }
 
-    private static void DetermineMaterial(ref Slot partSlot, MaterialType t, StaticTexture2D t2d, ProceduralTexture pt) // TODO: Implement more materials, assign pt
+    private static async Task<Slot> DetermineMaterial(Slot partSlot, MaterialType t, StaticTexture2D t2d, ProceduralTexture pt) // TODO: Implement more materials, assign pt
     {
         var mr = partSlot.GetComponent<MeshRenderer>(); // There should always be a MeshRenderer attached to this slot
         if (mr == null) mr = partSlot.AttachComponent<MeshRenderer>();
@@ -56,67 +58,81 @@ internal class MeshConverter
         switch (t)
         {
             case MaterialType.Unshiny:
-                var us = SetupMetallic(ref partSlot, ref mr, ref t2d, ref pt);
+                var us = await SetupMetallic(partSlot, mr, t2d, pt);
                 us.Metallic.Value = 0;
                 us.Smoothness.Value = 0;
                 break;
             case MaterialType.Metallic:
-                SetupMetallic(ref partSlot, ref mr, ref t2d, ref pt);
+                await SetupMetallic(partSlot, mr, t2d, pt);
                 break;
             case MaterialType.VeryMetallic:
-                var vm = SetupMetallic(ref partSlot, ref mr, ref t2d, ref pt);
+                var vm = await SetupMetallic(partSlot, mr, t2d, pt);
                 vm.Metallic.Value = 1;
                 break;
             case MaterialType.Brightness:
             case MaterialType.Glow:
-                SetupUnlit(ref partSlot, ref mr, ref t2d, ref pt);
+                await SetupUnlit(partSlot, mr, t2d, pt);
                 break;
             default:
-                SetupMetallic(ref partSlot, ref mr, ref t2d, ref pt);
+                await SetupMetallic(partSlot, mr, t2d, pt);
                 break;
         }
+
+        return partSlot;
     }
 
-    private static PBS_Metallic SetupMetallic(ref Slot partSlot, ref MeshRenderer mr, ref StaticTexture2D t2d, ref ProceduralTexture pt)
+    private static async Task<PBS_Metallic> SetupMetallic(Slot partSlot, MeshRenderer mr, StaticTexture2D t2d, ProceduralTexture pt)
     {
         var mat = partSlot.AttachComponent<PBS_Metallic>();
-        TextureSetHelper(mat.AlbedoTexture, ref t2d, ref pt);
+        await TextureSetHelper(mat.AlbedoTexture, t2d, pt);
         if (mr.Materials.Count == 0)
-            mr.Materials[0] = mat;
-        else
             mr.Materials.Add(mat);
+        else
+            mr.Materials[0] = mat;
         return mat;
     }
 
-    private static UnlitMaterial SetupUnlit(ref Slot partSlot, ref MeshRenderer mr, ref StaticTexture2D t2d, ref ProceduralTexture pt)
+    private static async Task<UnlitMaterial> SetupUnlit(Slot partSlot, MeshRenderer mr, StaticTexture2D t2d, ProceduralTexture pt)
     {
         var mat = partSlot.AttachComponent<UnlitMaterial>();
-        TextureSetHelper(mat.Texture, ref t2d, ref pt);
+        await TextureSetHelper(mat.Texture, t2d, pt);
         if (mr.Materials.Count == 0)
-            mr.Materials[0] = mat;
-        else
             mr.Materials.Add(mat);
+        else
+            mr.Materials[0] = mat;
         return mat;
     }
 
-    private static void TextureSetHelper(AssetRef<ITexture2D> provider, ref StaticTexture2D t2d, ref ProceduralTexture pt)
+    private static async Task<AssetRef<ITexture2D>> TextureSetHelper(AssetRef<ITexture2D> provider, StaticTexture2D t2d, ProceduralTexture pt)
     {
+        await default(ToWorld);
         if (pt != null) provider.Target = pt;
         if (t2d != null) provider.Target = t2d; // Prioritize StaticTexture2Ds over ProceduralTextures
+        await default(ToBackground);
+
+        return provider;
     }
 
-    private static void DetermineTexture(ref Slot partSlot, List<TextureType> t)
+    private static async Task<Slot> DetermineTexture(Slot partSlot, List<TextureType> t)
     {
-        if (t == null) return;
+        if (t == null) return partSlot;
 
-        foreach (var texture in t)
+        foreach (var textureType in t)
         {
-            switch (texture)
-            {
-                case TextureType.PerlinNoise1:
-                    partSlot.AttachComponent<NoiseTexture>();
-                    break;
-            }
+            var anylandTextureName = AnylandTextureDictionary.Textures[textureType];
+            var path = Path.Combine(AnylandTextureDictionary.Path, anylandTextureName);
+            if (!File.Exists(path)) continue;
+
+            await ImageImporter.ImportImage(path, partSlot);
+
+            //switch (texture)
+            //{
+            //    case TextureType.PerlinNoise1:
+            //        partSlot.AttachComponent<NoiseTexture>();
+            //        break;
+            //}
         }
+
+        return partSlot;
     }
 }

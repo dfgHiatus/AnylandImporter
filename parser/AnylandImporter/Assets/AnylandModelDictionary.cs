@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 
 namespace AnylandImporter.Assets;
 
-internal class AnylandModelDictionary
+internal static class AnylandModelDictionary
 {
+    internal static readonly string Path = System.IO.Path.Combine(Importer.CachePath, "baseShapes");
+
+
     internal static Dictionary<ThingPartBase, string> Models = new()
     {
         { ThingPartBase.Cube, "1.obj" },

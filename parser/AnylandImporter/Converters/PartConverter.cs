@@ -2,6 +2,8 @@
 using FrooxEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEngine;
+using UnityNeos;
 
 namespace AnylandImporter.Converters;
 
@@ -24,31 +26,45 @@ internal class PartConverter
 
             if (part.i != null)
             {
-                foreach (var subthing in part.i)
-                {
-                    await default(ToWorld);
-                    var subthingSlot = slot.AddSlot(subthing.n ?? "Subthing");
-                    subthingSlot.LocalPosition = (float3)new double3(subthing.p[0], subthing.p[1], subthing.p[2]);
-                    subthingSlot.LocalRotation = floatQ.Euler((float3)new double3(subthing.r[0], subthing.r[1], subthing.r[2]));
-                    await default(ToBackground);
-                }
+                await ProcessSubthings(slot, part);
             }
 
             if (part.su != null)
             {
-                foreach (var subthing in part.su)
-                {
-                    await default(ToWorld);
-                    var subthingSlot = slot.AddSlot("Placed Subthing");
-                    subthingSlot.LocalPosition = (float3)new double3(subthing.p[0], subthing.p[1], subthing.p[2]);
-                    subthingSlot.LocalRotation = floatQ.Euler((float3)new double3(subthing.r[0], subthing.r[1], subthing.r[2]));
-                    await default(ToBackground);
-                }
+                await ProcessPlacedSubthings(slot, part);
             }
 
             await ParticleConverter.Convert(partSlot, part.pr);
         }
 
         return slot;
+    }
+
+    private static async Task ProcessSubthings(Slot slot, Part part)
+    {
+        foreach (var subthing in part.i)
+        {
+            await default(ToWorld);
+            var subthingSlot = slot.AddSlot(subthing.n ?? "Subthing");
+            if (Utils.TryAnylandVector3ToFloat3(subthing.p, out var position))
+                subthingSlot.LocalPosition = position;
+            if (Utils.TryAnylandQuaternionToFloatQ(subthing.r, out var rotation))
+                subthingSlot.LocalRotation = rotation;
+            await default(ToBackground);
+        }
+    }
+
+    private static async Task ProcessPlacedSubthings(Slot slot, Part part)
+    {
+        foreach (var subthing in part.su)
+        {
+            await default(ToWorld);
+            var subthingSlot = slot.AddSlot("Placed Subthing");
+            if (Utils.TryAnylandVector3ToFloat3(subthing.p, out var position))
+                subthingSlot.LocalPosition = position;
+            if (Utils.TryAnylandQuaternionToFloatQ(subthing.r, out var rotation))
+                subthingSlot.LocalRotation = rotation;
+            await default(ToBackground);
+        }
     }
 }

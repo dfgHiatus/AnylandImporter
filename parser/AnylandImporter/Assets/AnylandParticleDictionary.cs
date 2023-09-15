@@ -1,0 +1,72 @@
+﻿using System.Collections.Generic;
+
+namespace AnylandImporter.Assets;
+
+internal static class AnylandParticleDictionary
+{
+    internal static readonly string Path = System.IO.Path.Combine(Importer.CachePath, "baseTextures");
+
+    internal static Dictionary<ParticleSystemType, string> Particles = new()
+    {
+        { ParticleSystemType.Flares, "Flares.png"}, 
+        { ParticleSystemType.Twinkle, "Twinkle.png"}, 
+        { ParticleSystemType.Clouds, "Clouds.png"}, 
+        { ParticleSystemType.GlowSpheres, "GlowSpheres.png"}, 
+        { ParticleSystemType.Fumes, "Fumes.png"}, 
+        { ParticleSystemType.FumesDirected, "FumesDirected.png"}, 
+        { ParticleSystemType.Rain, "Rain.png"}, 
+        { ParticleSystemType.GroundSmoke, "GroundSmoke.png"}, 
+        { ParticleSystemType.Ripples, "Ripples.png"}, 
+        { ParticleSystemType.RipplesVertical, "RipplesVertical.png"}, 
+        { ParticleSystemType.TwisterPoints, "TwisterPoints.png"}, 
+        { ParticleSystemType.TwisterLines, "TwisterLines.png"}, 
+        { ParticleSystemType.NoisyWater, "NoisyWater.png"}, 
+        { ParticleSystemType.Bubbles, "Bubbles.png"}, 
+        { ParticleSystemType.Fire, "Fire.png"}, 
+        { ParticleSystemType.TwistedSmoke, "TwistedSmoke.png"}, 
+        { ParticleSystemType.FireRain, "FireRain.png"}, 
+        { ParticleSystemType.SmokeRain, "SmokeRain.png"}, 
+        { ParticleSystemType.FireRainWild, "FireRainWild.png"}, 
+        { ParticleSystemType.FireMore, "FireMore.png"}, 
+        { ParticleSystemType.OrganicSplatter, "OrganicSplatter.png"}, 
+        { ParticleSystemType.Rings, "Rings.png"}, 
+        { ParticleSystemType.FireCrackerBurst, "FireCrackerBurst.png"}, 
+        { ParticleSystemType.FireCrackerSmoke, "FireCrackerSmoke.png"}, 
+        { ParticleSystemType.FireCrackerFlares, "FireCrackerFlares.png"}, 
+        { ParticleSystemType.Embers, "Embers.png"}, 
+        { ParticleSystemType.Beams, "Beams.png"}, 
+        { ParticleSystemType.BeamsCustom, "BeamsCustom.png"}, 
+        { ParticleSystemType.Dust, "Dust.png"}, 
+        { ParticleSystemType.Fog, "Fog.png"}, 
+        { ParticleSystemType.AreaEmbers, "AreaEmbers.png"}, 
+        { ParticleSystemType.Rays, "Rays.png"}, 
+        { ParticleSystemType.ScatterRays, "ScatterRays.png"}, 
+        { ParticleSystemType.CenteredElectric, "CenteredElectric.png"}, 
+        { ParticleSystemType.Smoke, "Smoke.png"}, 
+        { ParticleSystemType.CircularSmoke, "CircularSmoke.png"}, 
+        { ParticleSystemType.CircularSmokeCustom, "CircularSmokeCustom.png"}, 
+        { ParticleSystemType.Shards, "Shards.png"}, 
+        { ParticleSystemType.RoughShards, "RoughShards.png"}, 
+        { ParticleSystemType.FireThrow, "FireThrow.png"}, 
+        { ParticleSystemType.SoftFire, "SoftFire.png"}, 
+        { ParticleSystemType.SpiralSmoke, "SpiralSmoke.png"}, 
+        { ParticleSystemType.TwisterSmoke, "TwisterSmoke.png"}, 
+        { ParticleSystemType.ShrinkSmoke, "ShrinkSmoke.png"}, 
+        { ParticleSystemType.ThickSmoke, "ThickSmoke.png"}, 
+        { ParticleSystemType.PopSmoke, "PopSmoke.png"}, 
+        { ParticleSystemType.PlopSmoke, "PlopSmoke.png"}, 
+        { ParticleSystemType.LightStreaks, "LightStreaks.png"}, 
+        { ParticleSystemType.Fractals, "Fractals.png"}, 
+        { ParticleSystemType.WaterFlow, "WaterFlow.png"}, 
+        { ParticleSystemType.WaterFlowSoft, "WaterFlowSoft.png"}, 
+        { ParticleSystemType.StoppingEmbers, "StoppingEmbers.png"}, 
+        { ParticleSystemType.Sparks, "Sparks.png"}, 
+        { ParticleSystemType.Puffs, "Puffs.png"}, 
+        { ParticleSystemType.Flame, "Flame.png"}, 
+        { ParticleSystemType.FlameCustom, "FlameCustom.png"}, 
+        { ParticleSystemType.SoftSmoke, "SoftSmoke.png"}, 
+        { ParticleSystemType.Starry, "Starry.png"}, 
+        { ParticleSystemType.BubblingBlobs, "BubblingBlobs.png"}, 
+        { ParticleSystemType.Spheres, "Spheres.png" }
+    };
+}
