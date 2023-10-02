@@ -33,26 +33,27 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\NeosVR\0Harmony.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Resonite\Libraries\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="AssimpNet, Version=3.2.0.0, Culture=neutral, PublicKeyToken=0d51b391f59f42a6" />
-    <Reference Include="BaseX">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\NeosVR\BaseX.dll</HintPath>
+    <Reference Include="Elements.Assets">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\Elements.Assets.dll</HintPath>
     </Reference>
-    <Reference Include="BepuUtilities, Version=2.4.0.1, Culture=neutral, PublicKeyToken=a595ef937c270ac9" />
-    <Reference Include="CodeX">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\NeosVR\Neos_Data\Managed\CodeX.dll</HintPath>
+    <Reference Include="Elements.Core">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\Elements.Core.dll</HintPath>
     </Reference>
     <Reference Include="FrooxEngine">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\NeosVR\Neos_Data\Managed\FrooxEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="NeosModLoader">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\NeosVR\Libraries\NeosModLoader.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\FrooxEngine.dll</HintPath>
     </Reference>
     <Reference Include="netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\NeosVR\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.Bson">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\Newtonsoft.Json.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="ResoniteModLoader">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Resonite\Libraries\ResoniteModLoader.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -63,13 +64,13 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\NeosVR\Neos_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\NeosVR\Neos_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityNeos">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\NeosVR\Neos_Data\Managed\UnityNeos.dll</HintPath>
+    <Reference Include="UnityFrooxEngineRunner">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\UnityFrooxEngineRunner.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +96,7 @@
     <Compile Include="Enums\ThingVersion.cs" />
     <Compile Include="Converters\MeshConverter.cs" />
     <Compile Include="Models\Area.cs" />
+    <Compile Include="Models\Placements.cs" />
     <Compile Include="Models\Thing.cs" />
     <Compile Include="Models\ThingDescriptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -2,3 +2,5 @@ node_modules
 .vs\
 bin
 obj
+/parser/AnylandImporter/Assets
+/parser/AnylandImporter.Tests/Assets

@@ -7,7 +7,7 @@ namespace AnylandImporter.Tests
     public class Thing
     {
         public string id { get; set; }
-        public ThingDescriptor? thingDescriptor { get; set; }
+        public ThingDescriptor? def { get; set; }
 
         public Thing(string id, string def)
         {
@@ -15,7 +15,7 @@ namespace AnylandImporter.Tests
 
             try
             {
-                thingDescriptor = JsonConvert.DeserializeObject<ThingDescriptor>(Regex.Unescape(def));
+                this.def = JsonConvert.DeserializeObject<ThingDescriptor>(Regex.Unescape(def));
             }
             catch (JsonReaderException) { } // Malformed anyland information, skip
         }
@@ -23,7 +23,7 @@ namespace AnylandImporter.Tests
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"ThingDescriptor: {thingDescriptor?.ToString()}");
+            sb.AppendLine($"ThingDescriptor: {def?.ToString()}");
             sb.AppendLine($"ID: {id}");
             return sb.ToString();
         }

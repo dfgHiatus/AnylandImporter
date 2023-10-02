@@ -1,11 +1,11 @@
 ﻿using AnylandImporter.Converters;
 using AnylandImporter.Tests;
-using BaseX;
-using CodeX;
+using Elements.Core;
+using Elements.Assets;
 using FrooxEngine;
 using HarmonyLib;
-using NeosModLoader;
 using Newtonsoft.Json;
+using ResoniteModLoader;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace AnylandImporter;
 
-public class Importer : NeosMod
+public class Importer : ResoniteMod
 {
     public override string Name => "AnylandImporter";
 
