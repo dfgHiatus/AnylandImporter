@@ -43,12 +43,16 @@ internal class Utils
         return true;
     }
 
-    internal static bool TryAnylandColorToColor(double[] arr, out color target)
+    internal static bool TryAnylandColorToColorX(double[] arr, out colorX target)
     {
-        target = color.White;
+        target = colorX.White;
         if (arr != null) return false;
         if (arr.Length >= 3) return false;
-        target = new Color((float)arr[0], (float)arr[1], (float)arr[2]).ToEngine();
+        target = new Color(
+            (float)arr[0], 
+            (float)arr[1], 
+            (float)arr[2])
+            .ToEngineWithProfile(Importer.Config.GetValue(Importer.AnylandColorProfile));
         return true;
     }
 }

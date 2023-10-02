@@ -22,7 +22,7 @@ internal class MeshConverter
 
         await default(ToWorld);
         await UniversalImporter.Import(path, Engine.Current.WorldManager.FocusedWorld, partSlot.GlobalPosition, partSlot.GlobalRotation, true);
-        var importSlot = Engine.Current.WorldManager.FocusedWorld.RootSlot.Find(anylandModelName);
+        var importSlot = Engine.Current.WorldManager.FocusedWorld.RootSlot.FindChild(anylandModelName);
         importSlot.SetParent(partSlot); // Will preserve global transform
         importSlot.AttachComponent<MeshCollider>();
         await default(ToBackground);

@@ -1,10 +1,7 @@
-﻿using BaseX;
-using FrooxEngine;
+﻿using FrooxEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UnityEngine;
-using UnityNeos;
 
 namespace AnylandImporter.Converters;
 
@@ -23,7 +20,7 @@ internal class StateConverter
             child.LocalRotation = rot;
         if (Utils.TryAnylandVector3ToFloat3(firstState.s, out var scale))
             child.LocalScale = scale;
-        if (Utils.TryAnylandColorToColor(firstState.c, out var color))
+        if (Utils.TryAnylandColorToColorX(firstState.c, out var color))
         {
             var pbs = child.GetComponent<PBS_Metallic>();
             if (pbs != null)

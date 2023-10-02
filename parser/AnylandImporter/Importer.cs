@@ -16,21 +16,22 @@ namespace AnylandImporter;
 public class Importer : ResoniteMod
 {
     public override string Name => "AnylandImporter";
-
     public override string Author => "dfgHiatus";
-
     public override string Version => "1.0.0";
 
-    public static ModConfiguration config;
+    [AutoRegisterConfigKey]
+    internal static readonly ModConfigurationKey<ColorProfile> AnylandColorProfile = 
+        new("colorProfile", "The ColorProfile to import anyland colors in", () => ColorProfile.sRGB);
+
+    public static ModConfiguration Config;
     public const string AnylandWorldExtension = ".anyland";
     internal static readonly string CachePath = Path.Combine(Engine.Current.AppPath, "nml_mods", "AnylandImporter");
 
     public override void OnEngineInit()
     {
         new Harmony("net.dfgHiatus.AnylandImporter").PatchAll();
-        config = GetConfiguration();
+        Config = GetConfiguration();
     }
-
 
     [HarmonyPatch(typeof(UniversalImporter), "Import", typeof(AssetClass), typeof(IEnumerable<string>),
         typeof(World), typeof(float3), typeof(floatQ), typeof(bool))]
