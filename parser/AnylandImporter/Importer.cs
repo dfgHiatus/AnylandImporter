@@ -1,7 +1,7 @@
-﻿using AnylandImporter.Converters;
-using AnylandImporter.Tests;
-using Elements.Core;
+﻿using AnylandImporter.Common;
+using AnylandImporter.Converters;
 using Elements.Assets;
+using Elements.Core;
 using FrooxEngine;
 using HarmonyLib;
 using Newtonsoft.Json;
@@ -9,7 +9,11 @@ using ResoniteModLoader;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using UnityEngine;
+using UnityFrooxEngineRunner;
 
 namespace AnylandImporter;
 
@@ -25,7 +29,7 @@ public class Importer : ResoniteMod
 
     public static ModConfiguration Config;
     public const string AnylandWorldExtension = ".anyland";
-    internal static readonly string CachePath = Path.Combine(Engine.Current.AppPath, "nml_mods", "AnylandImporter");
+    internal static readonly string CachePath = Path.Combine(Engine.Current.AppPath, "rml_mods", "AnylandImporter");
 
     public override void OnEngineInit()
     {
@@ -56,24 +60,24 @@ public class Importer : ResoniteMod
             {
                 slot.StartGlobalTask(async delegate
                 {
-                    Area area;
+                    Placements placements;
                     try
                     {
-                        area = JsonConvert.DeserializeObject<Area>(File.ReadAllText(file));
+                        placements = JsonConvert.DeserializeObject<Placements>(File.ReadAllText(file));
                     }
                     catch (Exception e)
                     {
-                        Error($"Failed to deserialize Area {file}: {e.Message}");
+                        Error($"Failed to deserialize Placements {file}: {e.Message}");
                         return;
                     }
 
-                    if (area == null)
+                    if (placements == null)
                     {
-                        Error($"Deserialized Area, but file was invalid: {file}");
+                        Error($"Deserialized Placements, but file was invalid: {file}");
                         return;
                     }
 
-                    await ImportAnylandWorld(slot, area);
+                    await ImportAnylandWorld(slot, placements);
                 });
             }
 
@@ -86,7 +90,7 @@ public class Importer : ResoniteMod
         /// Does the import-ant stuff ;)
         /// </summary>
         /// <param name="slot"></param>
-        /// <param name="area"></param>
+        /// <param name="placements"></param>
         /// <remarks>
         /// Presently, we skip:
         /// - inc: Name IDs
@@ -95,29 +99,75 @@ public class Importer : ResoniteMod
         /// - changed vertices
         /// - body
         /// </remarks>
-        private static async Task ImportAnylandWorld(Slot slot, Area area)
+        private static async Task ImportAnylandWorld(Slot slot, Placements placements)
         {
-            if (area == null) return;
-            if (area.thingDefinitions == null) return;
+            if (placements == null) return;
+
+            // TODO - Map EnvironmentChangers to Resonite
+            //var environmentChangers =
+            //    JsonConvert.DeserializeObject<EnvironmentChanger[]>
+            //    (Regex.Unescape(placements.environmentChangersJSON));
 
             await default(ToWorld);
+            if (!string.IsNullOrEmpty(placements.areaName))
+                slot.Name = placements.areaName;
             var objectRoot = slot.AttachComponent<ObjectRoot>();
             await default(ToBackground);
 
-            foreach (var thing in area.thingDefinitions)
+            // Construct a dictionary of all the things's transforms in the world
+            Dictionary<string, List<AnylandTransformModel>> transformDictionary = new();
+            foreach (var id in placements.area.thingDefinitions.Select(t => t.id))
+            {
+                var associatedTransforms = placements.placements.Where(p => id == p.Tid);
+                List<AnylandTransformModel> atms = new();
+
+                foreach (var placement in associatedTransforms)
+                {
+                    AnylandTransformModel atm = new AnylandTransformModel()
+                    {
+                        Position = new Vector3(placement.P.x, placement.P.y, placement.P.z).ToEngine(),
+                        Rotation = Quaternion.Euler(placement.P.x, placement.P.y, placement.P.z).ToEngine(),
+                        Scale = placement.S == 0 ? float3.One : new Vector3(placement.S, placement.S, placement.S).ToEngine()
+                    };
+                    atms.Add(atm);
+                }
+
+                transformDictionary.Add(id, atms);
+            }
+            UniLog.Log("Importing " + transformDictionary.Count + " placements");
+
+            // We need to deserialize the environmentChangersJSON and the thingDefinitions as we go
+            foreach (var thing in placements.area.thingDefinitions)
             {
                 if (thing == null) continue;
-                if (thing.thingDescriptor == null) continue;
+
+                var thingDescriptor = 
+                    JsonConvert.DeserializeObject<ThingDescriptor>(Regex.Unescape(thing.def));
 
                 await default(ToWorld);
-                var child = slot.AddSlot(thing.thingDescriptor.n ?? "Thing");
+                var child = slot.AddSlot(thingDescriptor.n ?? "Thing");
+                var transform = transformDictionary[thing.id].First();
+                child.GlobalPosition = transform.Position;
+                child.GlobalRotation = transform.Rotation;
+                child.GlobalScale = transform.Scale;
                 await default(ToBackground);
 
-                child = await StateConverter.Convert(child, thing.thingDescriptor.s); // Place this first so transforms have priority
-                child = await AttributeConverter.Convert(child, thing.thingDescriptor.a);
-                child = await CommentConverter.Convert(child, thing.thingDescriptor.d);
-                child = await TagConverter.Convert(child, thing.thingDescriptor.v.ToString());
-                child = await PartConverter.Convert(child, thing.thingDescriptor.p);
+                child = await StateConverter.Convert(child, thingDescriptor.s); // Place this first so transforms have priority
+                child = await AttributeConverter.Convert(child, thingDescriptor.a);
+                child = await CommentConverter.Convert(child, thingDescriptor.d);
+                child = await TagConverter.Convert(child, thingDescriptor.v.ToString());
+                child = await PartConverter.Convert(child, thingDescriptor.p);
+
+                await default(ToWorld);
+                foreach (var t in transformDictionary[thing.id].Skip(1))
+                {
+                    // Duplicate the child for each transform
+                    var dupe = child.Duplicate();
+                    dupe.GlobalPosition = t.Position;
+                    dupe.GlobalRotation = t.Rotation;
+                    dupe.GlobalScale = t.Scale;
+                }
+                await default(ToBackground);
             }
 
             // TODO: Test world optimizations
@@ -132,4 +182,11 @@ public class Importer : ResoniteMod
 
         }
     }
+}
+
+public class AnylandTransformModel
+{
+    public float3 Position;
+    public floatQ Rotation;
+    public float3 Scale;
 }

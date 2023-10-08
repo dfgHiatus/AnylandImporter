@@ -12,7 +12,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="zetaphor%27s lab_test.json">
+    <ProjectReference Include="..\Anyland.Common\AnylandImporter.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Tests\buildtown.anyland">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Tests\buildtown__57f67019817496af5268f719_rr591bbb78578375c81f557a52.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Tests\buildtown__57f67019817496af5268f719_rr591bbb78578375c81f557a52_areaData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Tests\zetaphor's lab_test.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

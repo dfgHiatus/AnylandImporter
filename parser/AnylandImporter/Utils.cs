@@ -25,6 +25,37 @@ internal class Utils
         return BitConverter.ToString(hash).Replace("-", "");
     }
 
+    internal static bool TryAnylandVector3ToFloat3(float[] arr, out float3 target)
+    {
+        target = float3.Zero;
+        if (arr != null) return false;
+        if (arr.Length >= 3) return false;
+        target = new Vector3(arr[0], arr[1], arr[2]).ToEngine();
+        return true;
+    }
+
+    internal static bool TryAnylandQuaternionToFloatQ(float[] arr, out floatQ target)
+    {
+        target = floatQ.Identity;
+        if (arr != null) return false;
+        if (arr.Length >= 3) return false;
+        target = Quaternion.Euler(arr[0], arr[1], arr[2]).ToEngine();
+        return true;
+    }
+
+    internal static bool TryAnylandColorToColorX(float[] arr, out colorX target)
+    {
+        target = colorX.White;
+        if (arr != null) return false;
+        if (arr.Length >= 3) return false;
+        target = new Color(
+            arr[0],
+            arr[1],
+            arr[2])
+            .ToEngineWithProfile(Importer.Config.GetValue(Importer.AnylandColorProfile));
+        return true;
+    }
+
     internal static bool TryAnylandVector3ToFloat3(double[] arr, out float3 target)
     {
         target = float3.Zero;

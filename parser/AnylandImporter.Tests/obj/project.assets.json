@@ -14,6 +14,15 @@
             "related": ".xml"
           }
         }
+      },
+      "AnylandImporter.Common/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/AnylandImporter.Common.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/AnylandImporter.Common.dll": {}
+        }
       }
     }
   },
@@ -47,10 +56,16 @@
         "newtonsoft.json.nuspec",
         "packageIcon.png"
       ]
+    },
+    "AnylandImporter.Common/1.0.0": {
+      "type": "project",
+      "path": "../Anyland.Common/AnylandImporter.Common.csproj",
+      "msbuildProject": "../Anyland.Common/AnylandImporter.Common.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
+      "AnylandImporter.Common >= 1.0.0",
       "Newtonsoft.Json >= 13.0.3"
     ]
   },
@@ -86,7 +101,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\BenjaminEvans\\source\\repos\\anyland-archive\\parser\\Anyland.Common\\AnylandImporter.Common.csproj": {
+              "projectPath": "C:\\Users\\BenjaminEvans\\source\\repos\\anyland-archive\\parser\\Anyland.Common\\AnylandImporter.Common.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

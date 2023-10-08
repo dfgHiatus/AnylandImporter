@@ -1,4 +1,3 @@
-C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\bin\Release\net7.0\zetaphor's lab_test.json
 C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\bin\Release\net7.0\AnylandImporter.Tests.exe
 C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\bin\Release\net7.0\AnylandImporter.Tests.deps.json
 C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\bin\Release\net7.0\AnylandImporter.Tests.runtimeconfig.json
@@ -16,3 +15,8 @@ C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests
 C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\obj\Release\net7.0\AnylandImporter.Tests.pdb
 C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\obj\Release\net7.0\AnylandImporter.Tests.genruntimeconfig.cache
 C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\obj\Release\net7.0\ref\AnylandImporter.Tests.dll
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\bin\Release\net7.0\Tests\buildtown__57f67019817496af5268f719_rr591bbb78578375c81f557a52.json
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\bin\Release\net7.0\Tests\buildtown__57f67019817496af5268f719_rr591bbb78578375c81f557a52_areaData.json
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\bin\Release\net7.0\Tests\zetaphor's lab_test.json
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\bin\Release\net7.0\Anyland.Common.dll
+C:\Users\BenjaminEvans\source\repos\anyland-archive\parser\AnylandImporter.Tests\bin\Release\net7.0\Anyland.Common.pdb

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace AnylandImporter;
+namespace AnylandImporter.Common;
 
 public class ThingDescriptor
 {
@@ -93,8 +94,8 @@ public class ThingDescriptor
         foreach (var part in p)
         {
             sb.AppendLine($"  Part:");
-            sb.AppendLine($"    Base Shape Type: {(ThingPartBase) part.b}");
-            sb.AppendLine($"    Material Type: {(MaterialType) part.t}");
+            sb.AppendLine($"    Base Shape Type: {part.b}");
+            sb.AppendLine($"    Material Type: {part.t}");
             if (part.a != null)
                 sb.AppendLine($"    Part Attributes: [{string.Join(", ", part.a)}]");
             sb.AppendLine($"    Part Name: {part.n ?? "No name"}");
@@ -103,9 +104,9 @@ public class ThingDescriptor
             sb.AppendLine($"    Line Height: {part.lh}");
             sb.AppendLine($"    Image URL: {part.im ?? "No Image URL"}");
             sb.AppendLine($"    Image Type: {part.imt ?? "No Image Type"}");
-            sb.AppendLine($"    Particle System Type: {(ParticleSystemType) part.pr}");
-            sb.AppendLine($"    Texture Type Layer 1: {(TextureType) part.t1}");
-            sb.AppendLine($"    Texture Type Layer 2: {(TextureType) part.t2}");
+            sb.AppendLine($"    Particle System Type: {part.pr}");
+            sb.AppendLine($"    Texture Type Layer 1: {part.t1}");
+            sb.AppendLine($"    Texture Type Layer 2: {part.t2}");
             if (part.ac != null)
             {
                 sb.AppendLine("    Auto-Continuation/Auto-Complete:");
@@ -117,21 +118,20 @@ public class ThingDescriptor
                 sb.AppendLine($"      Scale Randomization Factor: {part.ac.rs}");
             }
             // sb.AppendLine("    Changed Vertices:");
-            // Append the changed vertices information here...
-            //sb.AppendLine("    States:");
-            //foreach (var state in part.s)
-            //{
-            //    sb.AppendLine($"      Position: [{string.Join(", ", state.p)}]");
-            //    sb.AppendLine($"      Rotation: [{string.Join(", ", state.r)}]");
-            //    sb.AppendLine($"      Scale: [{string.Join(", ", state.s)}]");
-            //    sb.AppendLine($"      Color: [{string.Join(", ", state.c)}]");
-            //    sb.AppendLine("      Behavior Script Lines:");
-            //    foreach (var line in state.b)
-            //    {
-            //        sb.AppendLine($"        {line}");
-            //    }
-            //}
             // sb.AppendLine("    Auto-Attached Body Parts:");
+        }
+
+        if (s != null)
+        {
+            sb.AppendLine("    States:");
+            var firstState = s.FirstOrDefault();
+            if (firstState != null)
+            {
+                sb.AppendLine($"      Position: [{string.Join(", ", firstState.p)}]");
+                sb.AppendLine($"      Rotation: [{string.Join(", ", firstState.r)}]");
+                sb.AppendLine($"      Scale: [{string.Join(", ", firstState.s)}]");
+                sb.AppendLine($"      Color: [{string.Join(", ", firstState.c)}]");
+            }
         }
 
         return sb.ToString();

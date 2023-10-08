@@ -1,10 +1,10 @@
 ﻿using System.Text;
 
-namespace AnylandImporter.Tests
+namespace AnylandImporter.Common
 {
-    internal class Area
+    public class Area
     {
-        public Thing[]? thingDefinitions { get; set; }
+        public Thing[] thingDefinitions { get; set; }
         public int serveTime { get; set; }
 
         public override string ToString()

@@ -2,6 +2,9 @@
 using System.Diagnostics;
 using System.IO;
 using System;
+using AnylandImporter.Common;
+using System.Numerics;
+using System.Runtime.Intrinsics.Arm;
 
 namespace AnylandImporter.Tests;
 
@@ -10,8 +13,8 @@ internal class Program
     static void Main(string[] args)
     {
         // DeleteEmptyWorlds("areas");
-        // TestThing("zetaphor's lab_test.json");
-        ConvertWorlds("areasConverted");
+        TestThing("Tests/buildtown.anyland");
+        // ConvertWorlds("areasConverted");
     }
 
     private static void DeleteEmptyWorlds(string directoryPath)
@@ -45,8 +48,16 @@ internal class Program
 
     private static void TestThing(string json)
     {
-        var area = JsonConvert.DeserializeObject<Area>(File.ReadAllText(json));
-        Console.WriteLine(area!.ToString());
+        var placements = JsonConvert.DeserializeObject<Placements>(File.ReadAllText(json));
+
+        Dictionary<string, float[]> transformDictionary = new();
+        foreach (var id in placements.area.thingDefinitions.Select(t => t.id))
+        {
+            var associatedTransforms = placements.placements.Where(p => id == p.Tid);
+            transformDictionary.Add(id, associatedTransforms.Select(at => at.S).ToArray());
+        }
+
+        Console.WriteLine(placements!.ToString());
     }
 
     private static void ConvertWorlds(string directoryPath)
